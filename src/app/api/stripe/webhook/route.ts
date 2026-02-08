@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { constructWebhookEvent } from "@/lib/stripe";
 import { db, subscriptions, userAgents, paymentEvents, users } from "@/lib/db";
-import { eq } from "drizzle-orm";
+import { eq, and } from "drizzle-orm";
 import { generateId, nowUnix } from "@/lib/utils";
 
 export async function POST(request: NextRequest) {
@@ -25,6 +25,76 @@ export async function POST(request: NextRequest) {
 
   try {
     switch (event.type) {
+      // ── Checkout completed — create subscription + trigger bot pairing ──
+      case "checkout.session.completed": {
+        const session = event.data.object as unknown as {
+          id: string;
+          customer: string;
+          subscription: string;
+          metadata: { userId: string; agentId: string };
+        };
+        const { userId, agentId } = session.metadata;
+
+        if (!userId || !agentId) break;
+
+        // Store Stripe customer ID on user
+        await db
+          .update(users)
+          .set({ stripeCustomerId: session.customer, updatedAt: nowUnix() })
+          .where(eq(users.id, userId));
+
+        // Check if subscription record already exists (may have been created by subscription.created event)
+        const existing = await db
+          .select()
+          .from(subscriptions)
+          .where(eq(subscriptions.stripeSubscriptionId, session.subscription))
+          .limit(1);
+
+        if (existing.length === 0) {
+          // Create a placeholder — subscription.created webhook will fill in period dates
+          await db.insert(subscriptions).values({
+            id: generateId(),
+            userId,
+            agentId,
+            stripeSubscriptionId: session.subscription,
+            status: "active",
+            currentPeriodStart: nowUnix(),
+            currentPeriodEnd: null,
+            createdAt: nowUnix(),
+            updatedAt: nowUnix(),
+          });
+        }
+
+        // Create user_agents record for workspace provisioning if not exists
+        const existingUA = await db
+          .select()
+          .from(userAgents)
+          .where(
+            and(
+              eq(userAgents.userId, userId),
+              eq(userAgents.agentId, agentId)
+            )
+          )
+          .limit(1);
+
+        if (existingUA.length === 0) {
+          const workspacePath = `/data/users/${userId}/agents/${agentId}`;
+          await db.insert(userAgents).values({
+            id: generateId(),
+            userId,
+            agentId,
+            workspacePath,
+            isPaired: false,
+            onboardingCompleted: false,
+            createdAt: nowUnix(),
+            updatedAt: nowUnix(),
+          });
+        }
+
+        break;
+      }
+
+      // ── Subscription created or updated — upsert record ──
       case "customer.subscription.created":
       case "customer.subscription.updated": {
         const sub = event.data.object as unknown as {
@@ -39,7 +109,6 @@ export async function POST(request: NextRequest) {
 
         if (!userId || !agentId) break;
 
-        // Upsert subscription
         const existing = await db
           .select()
           .from(subscriptions)
@@ -69,7 +138,6 @@ export async function POST(request: NextRequest) {
             updatedAt: nowUnix(),
           });
 
-          // Create user_agents record for workspace provisioning
           const workspacePath = `/data/users/${userId}/agents/${agentId}`;
           await db.insert(userAgents).values({
             id: generateId(),
@@ -83,29 +151,75 @@ export async function POST(request: NextRequest) {
           });
         }
 
-        // Store Stripe customer ID on user if not already set
+        // Store Stripe customer ID on user
         await db
           .update(users)
-          .set({
-            stripeCustomerId: sub.customer as string,
-            updatedAt: nowUnix(),
-          })
+          .set({ stripeCustomerId: sub.customer, updatedAt: nowUnix() })
           .where(eq(users.id, userId));
 
         break;
       }
 
+      // ── Subscription deleted — mark inactive ──
       case "customer.subscription.deleted": {
-        const sub = event.data.object as unknown as { id: string };
+        const sub = event.data.object as unknown as {
+          id: string;
+          metadata: { userId: string; agentId: string };
+        };
+
         await db
           .update(subscriptions)
           .set({ status: "canceled", updatedAt: nowUnix() })
           .where(eq(subscriptions.stripeSubscriptionId, sub.id));
+
+        // Log the cancellation event
+        await db.insert(paymentEvents).values({
+          id: generateId(),
+          stripeEventId: event.id,
+          eventType: event.type,
+          amount: 0,
+          metadata: { subscriptionId: sub.id },
+          createdAt: nowUnix(),
+        });
+
         break;
       }
 
-      case "invoice.payment_succeeded":
+      // ── Payment failed — mark as past_due ──
       case "invoice.payment_failed": {
+        const invoice = event.data.object as unknown as {
+          customer: string;
+          amount_due: number;
+          amount_paid: number;
+          subscription: string;
+        };
+
+        // Mark subscription as past_due
+        if (invoice.subscription) {
+          await db
+            .update(subscriptions)
+            .set({ status: "past_due", updatedAt: nowUnix() })
+            .where(
+              eq(subscriptions.stripeSubscriptionId, invoice.subscription)
+            );
+        }
+
+        await db.insert(paymentEvents).values({
+          id: generateId(),
+          stripeEventId: event.id,
+          eventType: event.type,
+          amount: invoice.amount_due,
+          metadata: {
+            customer: invoice.customer,
+            subscription: invoice.subscription,
+          },
+          createdAt: nowUnix(),
+        });
+        break;
+      }
+
+      // ── Payment succeeded — log it ──
+      case "invoice.payment_succeeded": {
         const invoice = event.data.object as unknown as {
           customer: string;
           amount_paid: number;
@@ -116,7 +230,10 @@ export async function POST(request: NextRequest) {
           stripeEventId: event.id,
           eventType: event.type,
           amount: invoice.amount_paid,
-          metadata: { customer: invoice.customer, subscription: invoice.subscription },
+          metadata: {
+            customer: invoice.customer,
+            subscription: invoice.subscription,
+          },
           createdAt: nowUnix(),
         });
         break;
