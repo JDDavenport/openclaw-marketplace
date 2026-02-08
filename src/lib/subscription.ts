@@ -1,4 +1,4 @@
-import { db, subscriptions } from "@/lib/db";
+import { db, subscriptions, agents } from "@/lib/db";
 import { eq, and } from "drizzle-orm";
 import { nowUnix } from "@/lib/utils";
 
@@ -26,4 +26,38 @@ export async function checkSubscription(
     !sub.currentPeriodEnd || sub.currentPeriodEnd > nowUnix();
 
   return isActiveStatus && isPeriodValid;
+}
+
+/**
+ * Get all active subscriptions for a user with agent details.
+ * Returns subscriptions that are active or trialing and not expired.
+ */
+export async function getActiveSubscriptions(userId: string) {
+  const result = await db
+    .select({
+      subscriptionId: subscriptions.id,
+      status: subscriptions.status,
+      currentPeriodStart: subscriptions.currentPeriodStart,
+      currentPeriodEnd: subscriptions.currentPeriodEnd,
+      stripeSubscriptionId: subscriptions.stripeSubscriptionId,
+      agentId: agents.id,
+      agentName: agents.name,
+      agentSlug: agents.slug,
+      agentDescription: agents.description,
+      agentCategory: agents.category,
+      agentPrice: agents.priceMonthly,
+      agentBotUsername: agents.botUsername,
+      agentImageUrl: agents.imageUrl,
+    })
+    .from(subscriptions)
+    .innerJoin(agents, eq(subscriptions.agentId, agents.id))
+    .where(eq(subscriptions.userId, userId));
+
+  const now = nowUnix();
+
+  return result.filter((sub) => {
+    const isActiveStatus = sub.status === "active" || sub.status === "trialing";
+    const isPeriodValid = !sub.currentPeriodEnd || sub.currentPeriodEnd > now;
+    return isActiveStatus && isPeriodValid;
+  });
 }
