@@ -1,9 +1,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { agents, getAgentBySlug } from '@/lib/agents-data';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { CheckoutButton } from '@/components/agents/checkout-button';
 
 export function generateStaticParams() {
   return agents.map((agent) => ({ slug: agent.slug }));
@@ -49,9 +49,7 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
                 </div>
               </div>
 
-              <Button variant="gradient" size="lg" className="w-full mb-4">
-                Get {agent.name} →
-              </Button>
+              <CheckoutButton agentSlug={agent.slug} agentName={agent.name} />
 
               <div className="text-center text-xs text-gray-500 mb-6">
                 7-day free trial • Cancel anytime • Secure payment

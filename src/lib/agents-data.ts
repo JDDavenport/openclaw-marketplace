@@ -8,6 +8,7 @@ export interface Agent {
   longDescription: string;
   category: Exclude<Category, 'All'>;
   priceMonthly: number;
+  stripePriceId: string;
   features: string[];
   botUsername: string;
   faq: { question: string; answer: string }[];
@@ -22,6 +23,7 @@ export const agents: Agent[] = [
     longDescription: 'Study Buddy is your always-available personal tutor that breaks down complex topics into digestible explanations. Whether you\'re preparing for exams, learning a new skill, or tackling homework, Study Buddy adapts to your pace and learning style. It creates flashcards, quizzes you on material, explains concepts multiple ways until they click, and tracks your progress over time. Think of it as having a brilliant friend who never gets tired of explaining things.',
     category: 'Education',
     priceMonthly: 9,
+    stripePriceId: 'price_1SygbgEyHRuiEtXMyD6sATeP',
     features: [
       'Adaptive learning that matches your pace',
       'Instant explanations for any subject',
@@ -47,6 +49,7 @@ export const agents: Agent[] = [
     longDescription: 'Fitness Coach designs personalized workout plans based on your goals, equipment, and fitness level. Whether you\'re training at home with no equipment or hitting the gym, it creates structured programs that progressively challenge you. Get real-time form tips, alternative exercises for injuries, warm-up and cool-down routines, and the accountability you need to stay consistent. It\'s like having a personal trainer available 24/7 without the $100/hour price tag.',
     category: 'Health',
     priceMonthly: 9,
+    stripePriceId: 'price_1SygbhEyHRuiEtXMbndRZOoO',
     features: [
       'Custom workout plans for your goals',
       'Home & gym workout options',
@@ -72,6 +75,7 @@ export const agents: Agent[] = [
     longDescription: 'Meal Planner takes the stress out of "what\'s for dinner?" by creating personalized weekly meal plans that match your dietary preferences, allergies, budget, and cooking skill level. Get complete recipes with step-by-step instructions, auto-generated grocery lists organized by store aisle, and meal prep strategies to save time. Whether you\'re keto, vegan, gluten-free, or just trying to eat better, Meal Planner makes healthy eating effortless.',
     category: 'Health',
     priceMonthly: 7,
+    stripePriceId: 'price_1SygbiEyHRuiEtXMtjEn18F9',
     features: [
       'Personalized weekly meal plans',
       'Auto-generated grocery lists',
@@ -97,6 +101,7 @@ export const agents: Agent[] = [
     longDescription: 'Crypto Tracker keeps you informed about the crypto market without the noise. Get personalized alerts for price movements on coins you care about, daily market summaries, technical analysis breakdowns, and portfolio tracking — all through simple Telegram messages. No more refreshing CoinGecko every 5 minutes. Crypto Tracker distills market data into actionable insights so you can make informed decisions without being glued to charts all day.',
     category: 'Finance',
     priceMonthly: 12,
+    stripePriceId: 'price_1SygbiEyHRuiEtXMehFIKIa8',
     features: [
       'Real-time price alerts for your watchlist',
       'Daily market summary and trends',
@@ -122,6 +127,7 @@ export const agents: Agent[] = [
     longDescription: 'Accountability Partner is the nudge you need to actually follow through on your goals. Set personal goals, break them into daily habits, and get consistent check-ins that keep you on track. It celebrates your wins, helps you recover from setbacks without judgment, and uses proven behavioral science techniques to build lasting habits. Whether it\'s reading more, exercising daily, or finishing a project, Accountability Partner makes sure you show up for yourself.',
     category: 'Productivity',
     priceMonthly: 7,
+    stripePriceId: 'price_1SygbjEyHRuiEtXMrtkVRSLO',
     features: [
       'Goal setting with milestone breakdowns',
       'Daily habit tracking and check-ins',
@@ -147,6 +153,7 @@ export const agents: Agent[] = [
     longDescription: 'Journal Buddy makes journaling effortless and meaningful. Each day, it offers thoughtful prompts tailored to your mood and life situation, gently guiding you to reflect, process emotions, and gain clarity. Over time, it identifies patterns in your mood and thoughts, offering insights you might miss on your own. Whether you\'re processing a tough day, celebrating a win, or just need to think out loud, Journal Buddy is a judgment-free space that helps you understand yourself better.',
     category: 'Creative',
     priceMonthly: 7,
+    stripePriceId: 'price_1SygbjEyHRuiEtXMkG3eUx9m',
     features: [
       'Daily personalized journal prompts',
       'Mood tracking and pattern analysis',
@@ -172,6 +179,7 @@ export const agents: Agent[] = [
     longDescription: 'Career Coach is your secret weapon for professional growth. Get expert-level resume and cover letter reviews, practice tough interview questions with realistic feedback, learn salary negotiation tactics, and develop a strategic career plan. Whether you\'re job hunting, angling for a promotion, or considering a career change, Career Coach provides personalized guidance based on your industry, experience level, and goals. It\'s like having a career counselor and interview coach available whenever you need one.',
     category: 'Productivity',
     priceMonthly: 12,
+    stripePriceId: 'price_1SygbkEyHRuiEtXMXQN35JOw',
     features: [
       'Resume and cover letter optimization',
       'Mock interview practice with feedback',
@@ -197,6 +205,7 @@ export const agents: Agent[] = [
     longDescription: 'Budget Buddy makes personal finance simple and stress-free. Log your expenses through quick Telegram messages, set category budgets, and get clear visibility into where your money goes. It identifies spending patterns, suggests areas to save, and helps you work toward financial goals like building an emergency fund or saving for a vacation. No complicated spreadsheets or apps to learn — just chat naturally about your finances and Budget Buddy handles the rest.',
     category: 'Finance',
     priceMonthly: 9,
+    stripePriceId: 'price_1SygblEyHRuiEtXMu5n1UXeH',
     features: [
       'Quick expense logging via chat',
       'Category-based budget tracking',
@@ -222,6 +231,7 @@ export const agents: Agent[] = [
     longDescription: 'Writing Assistant is your creative partner for any writing project. Whether you\'re working on a novel, blog post, email, or social media content, it helps you brainstorm ideas, overcome writer\'s block, polish your prose, and find your voice. Get real-time feedback on clarity, tone, and structure. It can help you outline stories, develop characters, write compelling hooks, and edit for conciseness. Think of it as a supportive writing workshop partner who\'s always available and never judgmental.',
     category: 'Creative',
     priceMonthly: 9,
+    stripePriceId: 'price_1SygblEyHRuiEtXMi2gY5kls',
     features: [
       'Brainstorming and idea generation',
       'Writer\'s block breakthrough techniques',
@@ -247,6 +257,7 @@ export const agents: Agent[] = [
     longDescription: 'Language Tutor makes language learning feel natural and fun by turning your Telegram into an immersive practice environment. Have real conversations in your target language, get instant corrections with explanations, build vocabulary through contextual learning, and master grammar through practice — not memorization. It adapts to your proficiency level and learning goals, whether you\'re a complete beginner or polishing advanced skills. It\'s like having a patient native speaker available for practice anytime.',
     category: 'Education',
     priceMonthly: 9,
+    stripePriceId: 'price_1SygbmEyHRuiEtXM7Xtu8ihO',
     features: [
       'Conversational practice in your target language',
       'Instant corrections with explanations',

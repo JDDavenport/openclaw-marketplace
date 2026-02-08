@@ -1,8 +1,21 @@
+'use client';
+
+import { useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { agents } from '@/lib/agents-data';
 
-export default function CheckoutSuccessPage() {
+function SuccessContent() {
+  const searchParams = useSearchParams();
+  const agentSlug = searchParams.get('agent');
+  const agent = agentSlug ? agents.find(a => a.slug === agentSlug) : null;
+
+  const botUsername = agent?.botUsername || 'openclaw_bot';
+  const agentName = agent?.name || 'Your AI Agent';
+  const agentEmoji = agent?.emoji || '🤖';
+
   return (
     <div className="pt-28 pb-20">
       <div className="mx-auto max-w-2xl px-6 text-center">
@@ -15,17 +28,17 @@ export default function CheckoutSuccessPage() {
           You&apos;re All <span className="gradient-text">Set!</span>
         </h1>
         <p className="text-lg text-gray-400 mb-10">
-          Your AI agent is ready and waiting for you on Telegram. Let&apos;s get you connected.
+          {agentEmoji} <strong>{agentName}</strong> is ready and waiting for you on Telegram. Let&apos;s get you connected.
         </p>
 
         {/* Telegram CTA */}
         <a
-          href="https://t.me/openclaw_bot"
+          href={`https://t.me/${botUsername}`}
           target="_blank"
           rel="noopener noreferrer"
         >
           <Button variant="gradient" size="lg" className="text-lg px-12 py-5">
-            💬 Open Telegram Bot
+            💬 Open {agentName} on Telegram
           </Button>
         </a>
 
@@ -41,12 +54,12 @@ export default function CheckoutSuccessPage() {
               {
                 step: 1,
                 title: 'Open the Telegram link',
-                description: 'Click the button above or search for your bot username in Telegram.',
+                description: `Click the button above or search for @${botUsername} in Telegram.`,
               },
               {
                 step: 2,
                 title: 'Hit "Start"',
-                description: 'Press the Start button in Telegram to activate your personal agent.',
+                description: `Press the Start button in Telegram to activate your ${agentName}.`,
               },
               {
                 step: 3,
@@ -104,5 +117,13 @@ export default function CheckoutSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutSuccessPage() {
+  return (
+    <Suspense fallback={<div className="pt-28 pb-20 text-center text-gray-400">Loading...</div>}>
+      <SuccessContent />
+    </Suspense>
   );
 }
