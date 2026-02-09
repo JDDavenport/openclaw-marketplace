@@ -40,7 +40,7 @@ export const agents: Agent[] = [
     category: 'Monitors',
     tier: 'monitors',
     priceMonthly: 9,
-    stripePriceId: 'price_1SyjJKEyHRuiEtXMQz2cHork',
+    stripePriceId: 'price_1SymicEyHRuiEtXMHWoth6Aq',
     timeSaved: '20 min/day',
     dailyDeliverable: 'Morning assignment brief + deadline alerts every 2 hours',
     features: [
@@ -59,7 +59,7 @@ export const agents: Agent[] = [
       {
         name: 'Basic',
         price: 9,
-        stripePriceId: 'price_1SyjJKEyHRuiEtXMQz2cHork',
+        stripePriceId: 'price_1SymicEyHRuiEtXMHWoth6Aq',
         features: [
           'Daily morning brief with clickable Canvas links',
           'Deadline alerts every 2 hours',
@@ -70,7 +70,7 @@ export const agents: Agent[] = [
       {
         name: 'Pro',
         price: 15,
-        stripePriceId: 'price_1SylMsEyHRuiEtXMPOhecOoE',
+        stripePriceId: 'price_1SymicEyHRuiEtXMVS2yQE5T',
         features: [
           'Everything in Basic',
           'Subject Expert — ask questions from course content',
@@ -81,7 +81,7 @@ export const agents: Agent[] = [
       {
         name: 'Premium',
         price: 25,
-        stripePriceId: 'price_1SylMsEyHRuiEtXMyWSACrqb',
+        stripePriceId: 'price_1SymicEyHRuiEtXMIKlUPqnE',
         features: [
           'Everything in Pro',
           'AI-generated study plans',
