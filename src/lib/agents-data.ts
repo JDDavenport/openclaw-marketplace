@@ -1,6 +1,8 @@
 export type Tier = 'monitors' | 'workers' | 'premium';
 export type Category = 'All' | 'Monitors' | 'Workers' | 'Premium';
 
+export type AgentStatus = 'active' | 'coming_soon';
+
 export interface Agent {
   name: string;
   slug: string;
@@ -16,37 +18,39 @@ export interface Agent {
   timeSaved: string;
   dailyDeliverable: string;
   faq: { question: string; answer: string }[];
+  status: AgentStatus;
 }
 
 export const agents: Agent[] = [
   // === TIER 1: MONITORS ($9/mo) ===
   {
-    name: 'Morning Briefing Agent',
-    slug: 'morning-briefing',
-    emoji: '🌅',
-    description: 'Delivers a personalized daily briefing at 7:30 AM — news, weather, calendar, and industry updates in a 2-minute read. Saves 30+ minutes of morning scrolling.',
-    longDescription: 'Every morning at 7:30 AM, this agent delivers a curated briefing tailored to you: top news stories for your industry (5 articles max), local weather with outfit recommendations, your calendar overview with meeting prep notes, traffic and commute info, and a productivity tip. It learns your reading habits over time to surface only what matters. No more doom-scrolling through feeds — your morning briefing is done in 2 minutes flat.',
+    name: 'Canvas Study Agent',
+    slug: 'canvas-bot',
+    emoji: '📚',
+    description: 'Your AI study assistant that connects to Canvas LMS. Get daily assignment briefs, deadline alerts, and never miss a due date again. Works with any school using Canvas.',
+    longDescription: 'Connect your Canvas LMS account and this agent becomes your personal study assistant. Every morning you get a brief with all upcoming assignments grouped by urgency — overdue, due today, and due this week. Every 2 hours it checks for approaching deadlines and alerts you before anything slips through. Ask it anything: "What\'s due tomorrow?", "Show my grades", "Summarize Biology 101". It works with any school that uses Canvas (most universities do). Setup takes 2 minutes — just paste your Canvas API token and pick your courses.',
     category: 'Monitors',
     tier: 'monitors',
     priceMonthly: 9,
     stripePriceId: 'price_1SyjJKEyHRuiEtXMQz2cHork',
-    timeSaved: '30 min/day',
-    dailyDeliverable: 'Personalized morning briefing at 7:30 AM',
+    timeSaved: '20 min/day',
+    dailyDeliverable: 'Morning assignment brief + deadline alerts every 2 hours',
     features: [
-      'Personalized news digest — 5 articles, 2-minute read',
-      'Local weather + outfit recommendation',
-      'Calendar overview with meeting context',
-      'Industry-specific updates curated for you',
-      'Traffic and commute info before you leave',
-      'Learns your preferences over time',
-      'Delivered to Telegram every morning automatically',
-      'No interaction needed — fully autonomous',
+      'Daily morning brief with all assignments organized by urgency',
+      'Deadline alerts every 2 hours for unsubmitted work',
+      'Chat commands — ask about due dates, grades, courses anytime',
+      'Tracks submission status so you know what\'s done',
+      'Works with any school using Canvas LMS',
+      'Customizable brief time and timezone',
+      'Course-by-course grade summaries on demand',
+      '2-minute setup — just paste your Canvas token',
     ],
-    botUsername: 'openclaw_briefing_bot',
+    botUsername: 'openclaw_canvas_bot',
+    status: 'active',
     faq: [
-      { question: 'What time does the briefing arrive?', answer: '7:30 AM in your timezone by default, but you can customize this during onboarding. Some users prefer 6 AM, others 8 AM.' },
-      { question: 'How does it know what news I care about?', answer: 'During setup you pick 3 topics (business, tech, sports, etc.) and your city. The agent learns from which stories you click on and ask follow-ups about.' },
-      { question: 'Will it message me throughout the day?', answer: 'No. One briefing per morning unless you ask follow-up questions. It respects your attention.' },
+      { question: 'What schools does this work with?', answer: 'Any school that uses Canvas LMS (Instructure). This includes most US universities and many international ones. If your school\'s LMS URL contains "instructure.com" or "canvas", it will work.' },
+      { question: 'Is my Canvas token safe?', answer: 'Your token is encrypted and stored securely. We never share it or use it for anything other than fetching your course data. You can revoke it anytime from Canvas settings.' },
+      { question: 'What time does the morning brief arrive?', answer: '7:00 AM in your timezone by default, but you can customize this during setup. The deadline checker runs every 2 hours and only messages you when something urgent is coming up.' },
     ],
   },
   {
@@ -72,6 +76,7 @@ export const agents: Agent[] = [
       'One-tap buy links when deals hit',
     ],
     botUsername: 'openclaw_pricetrack_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'How many items can I track?', answer: 'Unlimited. Most users track 10-30 items across products, stocks, and crypto. Add items anytime by pasting a link or typing a stock symbol.' },
       { question: 'How fast are the alerts?', answer: 'Price checks run every 4 hours. When a drop is detected, you get a Telegram alert within minutes.' },
@@ -101,6 +106,7 @@ export const agents: Agent[] = [
       'Checks every 2 hours automatically',
     ],
     botUsername: 'openclaw_listener_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'How many keywords can I track?', answer: 'Up to 10 keywords or phrases. Most users track their name, company name, product names, and a few competitor names.' },
       { question: 'Will I get spammed with alerts?', answer: 'No. The agent scores mentions by importance and only alerts you on significant ones. Routine mentions go into the weekly report.' },
@@ -132,6 +138,7 @@ export const agents: Agent[] = [
       'Interview prep materials for scheduled interviews',
     ],
     botUsername: 'openclaw_jobhunt_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'How does job scoring work?', answer: 'The agent compares each job posting against your resume, skills, preferences, and salary targets. A 90+ score means near-perfect match. It explains why each score is what it is.' },
       { question: 'Are the cover letters actually personalized?', answer: 'Yes. Each cover letter references specific details from the job posting and company — not generic templates. Users report significantly higher response rates.' },
@@ -161,6 +168,7 @@ export const agents: Agent[] = [
       'Checks every 4 hours automatically',
     ],
     botUsername: 'openclaw_compwatch_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'What kinds of changes does it detect?', answer: 'Pricing changes, new features, content updates, job postings, team page changes, marketing copy shifts, and new integrations or partnerships.' },
       { question: 'How accurate is the change detection?', answer: 'Very. It uses visual comparison plus content analysis to catch both obvious and subtle changes. False positives are rare — cosmetic-only changes are filtered out.' },
@@ -190,6 +198,7 @@ export const agents: Agent[] = [
       'Reports delivered in 10-15 minutes',
     ],
     botUsername: 'openclaw_research_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'What topics can it research?', answer: 'Anything — market sizing, competitive analysis, technology trends, investment due diligence, academic topics, industry reports. If it\'s on the internet, the Research Agent can investigate it.' },
       { question: 'How long does a report take?', answer: 'Most reports are delivered in 10-15 minutes. Complex topics with many sources may take up to 20 minutes.' },
@@ -219,6 +228,7 @@ export const agents: Agent[] = [
       'Weekly relationship maintenance suggestions',
     ],
     botUsername: 'openclaw_crm_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'How do I log interactions?', answer: 'Just message something like "Had coffee with Sarah Chen — she\'s raising Series A, intro to her co-founder next week." The agent extracts names, context, and follow-ups automatically.' },
       { question: 'Can it integrate with my calendar?', answer: 'Yes. It can pull upcoming meetings and prepare context briefs for each attendee based on your interaction history.' },
@@ -250,6 +260,7 @@ export const agents: Agent[] = [
       'Midday check-in with schedule adjustments',
     ],
     botUsername: 'openclaw_ea_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'Does it actually manage my email?', answer: 'It drafts responses for your review — you always approve before anything is sent. It also auto-archives newsletters and flags truly urgent messages.' },
       { question: 'How does calendar optimization work?', answer: 'The agent analyzes your meeting patterns and suggests consolidation, blocks focus time during your most productive hours, and alerts you to scheduling conflicts.' },
@@ -279,6 +290,7 @@ export const agents: Agent[] = [
       'Weekly content performance review',
     ],
     botUsername: 'openclaw_content_bot',
+    status: 'coming_soon',
     faq: [
       { question: 'Does it post automatically?', answer: 'It prepares content for your review first. Once approved, it can schedule posts. You always have final say on what goes live.' },
       { question: 'What platforms does it support?', answer: 'Twitter/X, LinkedIn, blog (any platform), and email newsletters. Instagram and TikTok captions are coming soon.' },
@@ -311,7 +323,7 @@ export function getAgentsByTier(tier: Tier): Agent[] {
 export function getFeaturedAgents(): Agent[] {
   // One from each tier
   return [
-    agents.find(a => a.slug === 'morning-briefing')!,
+    agents.find(a => a.slug === 'canvas-bot')!,
     agents.find(a => a.slug === 'price-tracker')!,
     agents.find(a => a.slug === 'job-hunter')!,
     agents.find(a => a.slug === 'research-agent')!,

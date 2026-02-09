@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { agents, getAgentBySlug } from '@/lib/agents-data';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { CheckoutButton } from '@/components/agents/checkout-button';
 
@@ -14,9 +15,19 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
   const agent = getAgentBySlug(slug);
   if (!agent) notFound();
 
+  const isComingSoon = agent.status === 'coming_soon';
+
   return (
     <div className="pt-28 pb-20">
       <div className="mx-auto max-w-5xl px-6">
+        {/* Coming Soon Banner */}
+        {isComingSoon && (
+          <div className="mb-8 rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-6 py-4 text-center">
+            <span className="text-yellow-400 font-semibold text-lg">🚧 Coming Soon</span>
+            <p className="text-yellow-400/80 text-sm mt-1">This agent is currently in development. Check back soon!</p>
+          </div>
+        )}
+
         {/* Breadcrumb */}
         <div className="mb-8 flex items-center gap-2 text-sm text-gray-500">
           <Link href="/agents" className="hover:text-gray-300 transition-colors">Agents</Link>
@@ -62,10 +73,16 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
                 </div>
               </div>
 
-              <CheckoutButton agentSlug={agent.slug} agentName={agent.name} />
+              {isComingSoon ? (
+                <Button variant="outline" size="lg" className="w-full mb-4" disabled>
+                  Coming Soon
+                </Button>
+              ) : (
+                <CheckoutButton agentSlug={agent.slug} agentName={agent.name} />
+              )}
 
               <div className="text-center text-xs text-gray-500 mb-6">
-                7-day free trial • Cancel anytime • Secure payment
+                {isComingSoon ? 'This agent is under development' : '7-day free trial • Cancel anytime • Secure payment'}
               </div>
 
               <div className="border-t border-gray-800 pt-6 space-y-3">

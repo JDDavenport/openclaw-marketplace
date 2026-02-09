@@ -5,12 +5,22 @@ import { Button } from '@/components/ui/button';
 import type { Agent } from '@/lib/agents-data';
 
 export function AgentCard({ agent }: { agent: Agent }) {
+  const isComingSoon = agent.status === 'coming_soon';
+
   return (
     <Link href={`/agents/${agent.slug}`}>
-      <Card className="group p-6 hover:border-gray-700 hover:bg-gray-900/80 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 cursor-pointer h-full flex flex-col">
+      <Card className={`group p-6 hover:border-gray-700 hover:bg-gray-900/80 hover:-translate-y-1 hover:shadow-xl hover:shadow-blue-500/5 cursor-pointer h-full flex flex-col relative ${isComingSoon ? 'opacity-50' : ''}`}>
+        {isComingSoon && (
+          <div className="absolute top-3 right-3 z-10">
+            <span className="rounded-full bg-gray-700 px-3 py-1 text-xs font-medium text-gray-300">
+              Coming Soon
+            </span>
+          </div>
+        )}
+
         <div className="flex items-start justify-between mb-4">
           <span className="text-4xl">{agent.emoji}</span>
-          <Badge>{agent.category}</Badge>
+          {!isComingSoon && <Badge>{agent.category}</Badge>}
         </div>
 
         <h3 className="text-lg font-semibold text-white mb-2 group-hover:text-blue-400 transition-colors">
@@ -32,9 +42,15 @@ export function AgentCard({ agent }: { agent: Agent }) {
             <span className="text-2xl font-bold text-white">${agent.priceMonthly}</span>
             <span className="text-sm text-gray-500">/mo</span>
           </div>
-          <Button variant="gradient" size="sm">
-            Get Agent →
-          </Button>
+          {isComingSoon ? (
+            <Button variant="outline" size="sm" disabled>
+              Coming Soon
+            </Button>
+          ) : (
+            <Button variant="gradient" size="sm">
+              Get Agent →
+            </Button>
+          )}
         </div>
       </Card>
     </Link>
