@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Hero } from '@/components/landing/hero';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import { FAQ } from '@/components/landing/faq';
+import { NewsletterSignup } from '@/components/landing/newsletter-signup';
 import { AgentGrid } from '@/components/agents/agent-grid';
 import { Button } from '@/components/ui/button';
 import { getFeaturedAgents, agents, getAgentsByTier, tierInfo } from '@/lib/agents-data';
@@ -161,6 +162,7 @@ export default function Home() {
       <Pricing />
       <Testimonials />
       <FAQ />
+      <NewsletterSignup />
       <CTA />
     </>
   );

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { NewsletterSignup } from '@/components/landing/newsletter-signup';
 
 export function Footer() {
   return (
@@ -12,9 +13,11 @@ export function Footer() {
               </div>
               <span className="text-lg font-bold text-white">OpenClaw</span>
             </Link>
-            <p className="mt-4 text-sm text-gray-500 leading-relaxed">
+            <p className="mt-4 text-sm text-gray-500 leading-relaxed mb-4">
               Your AI agent, one click away. Personal AI agents delivered through Telegram.
             </p>
+            <p className="text-xs text-gray-600 mb-2">Get notified about new agents:</p>
+            <NewsletterSignup compact />
           </div>
 
           <div>

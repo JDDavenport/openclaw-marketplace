@@ -130,6 +130,14 @@ export const messages = sqliteTable("messages", {
   createdAt: integer("created_at").notNull(),
 });
 
+export const newsletterSubscribers = sqliteTable("newsletter_subscribers", {
+  id: text("id").primaryKey(),
+  email: text("email").unique().notNull(),
+  source: text("source").default("website"), // website, linkedin, etc.
+  status: text("status").default("active"), // active, unsubscribed
+  createdAt: integer("created_at").notNull(),
+});
+
 export const paymentEvents = sqliteTable("payment_events", {
   id: text("id").primaryKey(),
   userId: text("user_id").references(() => users.id),
