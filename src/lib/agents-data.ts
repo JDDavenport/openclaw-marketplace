@@ -29,7 +29,7 @@ export const agents: Agent[] = [
     category: 'Monitors',
     tier: 'monitors',
     priceMonthly: 9,
-    stripePriceId: 'price_1SygbgEyHRuiEtXMyD6sATeP',
+    stripePriceId: 'price_1SyjJKEyHRuiEtXMQz2cHork',
     timeSaved: '30 min/day',
     dailyDeliverable: 'Personalized morning briefing at 7:30 AM',
     features: [
@@ -58,7 +58,7 @@ export const agents: Agent[] = [
     category: 'Monitors',
     tier: 'monitors',
     priceMonthly: 9,
-    stripePriceId: 'price_1SygbhEyHRuiEtXMbndRZOoO',
+    stripePriceId: 'price_1SyjJKEyHRuiEtXMwb7KcZoV',
     timeSaved: '2-3 hrs/week',
     dailyDeliverable: 'Price checks every 4 hours + instant drop alerts',
     features: [
@@ -87,7 +87,7 @@ export const agents: Agent[] = [
     category: 'Monitors',
     tier: 'monitors',
     priceMonthly: 9,
-    stripePriceId: 'price_1SygbiEyHRuiEtXMtjEn18F9',
+    stripePriceId: 'price_1SyjJLEyHRuiEtXMFXqifgGE',
     timeSaved: '3-4 hrs/week',
     dailyDeliverable: 'Mention alerts every 2 hours + Friday reputation report',
     features: [
@@ -118,7 +118,7 @@ export const agents: Agent[] = [
     category: 'Workers',
     tier: 'workers',
     priceMonthly: 15,
-    stripePriceId: 'price_1SygbiEyHRuiEtXMehFIKIa8',
+    stripePriceId: 'price_1SyjJMEyHRuiEtXMSFchXr24',
     timeSaved: '8-10 hrs/week',
     dailyDeliverable: 'Daily job report with scored matches + cover letter drafts',
     features: [
@@ -147,7 +147,7 @@ export const agents: Agent[] = [
     category: 'Workers',
     tier: 'workers',
     priceMonthly: 15,
-    stripePriceId: 'price_1SygbjEyHRuiEtXMrtkVRSLO',
+    stripePriceId: 'price_1SyjJMEyHRuiEtXMP46Uxjnl',
     timeSaved: '5-8 hrs/week',
     dailyDeliverable: 'Real-time change alerts + Monday intelligence briefing',
     features: [
@@ -176,7 +176,7 @@ export const agents: Agent[] = [
     category: 'Workers',
     tier: 'workers',
     priceMonthly: 15,
-    stripePriceId: 'price_1SygbjEyHRuiEtXMkG3eUx9m',
+    stripePriceId: 'price_1SyjJNEyHRuiEtXMmws6C8AJ',
     timeSaved: '4-6 hrs/report',
     dailyDeliverable: 'On-demand research reports (up to 8/month)',
     features: [
@@ -205,7 +205,7 @@ export const agents: Agent[] = [
     category: 'Workers',
     tier: 'workers',
     priceMonthly: 15,
-    stripePriceId: 'price_1SygbkEyHRuiEtXMXQN35JOw',
+    stripePriceId: 'price_1SyjJOEyHRuiEtXMOWnZh3sG',
     timeSaved: '3-5 hrs/week',
     dailyDeliverable: 'Follow-up reminders + pre-meeting context briefs',
     features: [
@@ -236,7 +236,7 @@ export const agents: Agent[] = [
     category: 'Premium',
     tier: 'premium',
     priceMonthly: 25,
-    stripePriceId: 'price_1SygblEyHRuiEtXMu5n1UXeH',
+    stripePriceId: 'price_1SyjJOEyHRuiEtXMdguhUua4',
     timeSaved: '2+ hrs/day',
     dailyDeliverable: 'Morning brief, email drafts, meeting prep, evening wrap-up',
     features: [
@@ -265,7 +265,7 @@ export const agents: Agent[] = [
     category: 'Premium',
     tier: 'premium',
     priceMonthly: 25,
-    stripePriceId: 'price_1SygblEyHRuiEtXMi2gY5kls',
+    stripePriceId: 'price_1SyjJPEyHRuiEtXMelsG3k87',
     timeSaved: '10+ hrs/week',
     dailyDeliverable: 'Daily content drafts + evening performance report',
     features: [
