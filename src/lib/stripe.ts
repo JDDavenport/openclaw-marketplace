@@ -33,6 +33,7 @@ export async function createCheckoutSession({
   const stripe = getStripe();
   const params: Stripe.Checkout.SessionCreateParams = {
     mode: "subscription",
+    allow_promotion_codes: true,
     payment_method_types: ["card"],
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: successUrl,
