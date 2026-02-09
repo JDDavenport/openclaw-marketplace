@@ -5,7 +5,7 @@ import type Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
   try {
-    const { agentSlug, userId, userEmail } = await req.json();
+    const { agentSlug, userId, userEmail, priceId } = await req.json();
 
     const agent = getAgentBySlug(agentSlug);
     if (!agent) {
@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       allow_promotion_codes: true,
-      line_items: [{ price: agent.stripePriceId, quantity: 1 }],
+      line_items: [{ price: priceId || agent.stripePriceId, quantity: 1 }],
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&agent=${agentSlug}`,
       cancel_url: `${origin}/agents/${agentSlug}`,
       metadata: { agentSlug, agentId, userId: userId || 'anonymous' },

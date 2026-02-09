@@ -64,42 +64,93 @@ export default async function AgentDetailPage({ params }: { params: Promise<{ sl
 
           {/* Pricing card */}
           <div className="lg:col-span-2">
-            <Card className="p-8 sticky top-24 border-gray-700">
-              <div className="mb-6">
-                <div className="text-sm text-gray-500 mb-1">Monthly subscription</div>
-                <div>
-                  <span className="text-5xl font-bold">${agent.priceMonthly}</span>
-                  <span className="text-gray-500 text-lg">/mo</span>
+            {agent.tiers ? (
+              <div className="sticky top-24 space-y-4">
+                <div className="text-sm text-gray-500 mb-2">Choose your plan</div>
+                {agent.tiers.map((tier) => {
+                  const isPopular = tier.name === 'Pro';
+                  return (
+                    <Card
+                      key={tier.name}
+                      className={`p-6 border-gray-700 relative ${isPopular ? 'border-blue-500 ring-1 ring-blue-500/50' : ''}`}
+                    >
+                      {isPopular && (
+                        <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-blue-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+                          Most Popular
+                        </div>
+                      )}
+                      <div className="flex items-baseline justify-between mb-4">
+                        <h3 className="text-lg font-bold text-white">{tier.name}</h3>
+                        <div>
+                          <span className="text-3xl font-bold">${tier.price}</span>
+                          <span className="text-gray-500">/mo</span>
+                        </div>
+                      </div>
+                      <ul className="space-y-2 mb-5">
+                        {tier.features.map((f) => (
+                          <li key={f} className="flex items-start gap-2 text-sm text-gray-300">
+                            <span className="text-green-400 mt-0.5">✓</span>
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      {isComingSoon ? (
+                        <Button variant="outline" size="lg" className="w-full" disabled>
+                          Coming Soon
+                        </Button>
+                      ) : (
+                        <CheckoutButton
+                          agentSlug={agent.slug}
+                          agentName={agent.name}
+                          stripePriceId={tier.stripePriceId}
+                          label={`Get ${tier.name} — $${tier.price}/mo`}
+                        />
+                      )}
+                    </Card>
+                  );
+                })}
+                <div className="text-center text-xs text-gray-500 mt-2">
+                  7-day free trial • Cancel anytime • Secure payment
                 </div>
               </div>
+            ) : (
+              <Card className="p-8 sticky top-24 border-gray-700">
+                <div className="mb-6">
+                  <div className="text-sm text-gray-500 mb-1">Monthly subscription</div>
+                  <div>
+                    <span className="text-5xl font-bold">${agent.priceMonthly}</span>
+                    <span className="text-gray-500 text-lg">/mo</span>
+                  </div>
+                </div>
 
-              {isComingSoon ? (
-                <Button variant="outline" size="lg" className="w-full mb-4" disabled>
-                  Coming Soon
-                </Button>
-              ) : (
-                <CheckoutButton agentSlug={agent.slug} agentName={agent.name} />
-              )}
+                {isComingSoon ? (
+                  <Button variant="outline" size="lg" className="w-full mb-4" disabled>
+                    Coming Soon
+                  </Button>
+                ) : (
+                  <CheckoutButton agentSlug={agent.slug} agentName={agent.name} />
+                )}
 
-              <div className="text-center text-xs text-gray-500 mb-6">
-                {isComingSoon ? 'This agent is under development' : '7-day free trial • Cancel anytime • Secure payment'}
-              </div>
+                <div className="text-center text-xs text-gray-500 mb-6">
+                  {isComingSoon ? 'This agent is under development' : '7-day free trial • Cancel anytime • Secure payment'}
+                </div>
 
-              <div className="border-t border-gray-800 pt-6 space-y-3">
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span className="text-green-400">✓</span> Fully autonomous — works while you sleep
+                <div className="border-t border-gray-800 pt-6 space-y-3">
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <span className="text-green-400">✓</span> Fully autonomous — works while you sleep
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <span className="text-green-400">✓</span> Daily deliverables to your Telegram
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <span className="text-green-400">✓</span> Persistent memory across sessions
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <span className="text-green-400">✓</span> Saves {agent.timeSaved} of your time
+                  </div>
                 </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span className="text-green-400">✓</span> Daily deliverables to your Telegram
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span className="text-green-400">✓</span> Persistent memory across sessions
-                </div>
-                <div className="flex items-center gap-2 text-sm text-gray-400">
-                  <span className="text-green-400">✓</span> Saves {agent.timeSaved} of your time
-                </div>
-              </div>
-            </Card>
+              </Card>
+            )}
           </div>
         </div>
 

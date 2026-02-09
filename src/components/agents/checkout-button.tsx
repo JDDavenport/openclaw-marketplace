@@ -3,16 +3,29 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
-export function CheckoutButton({ agentSlug, agentName }: { agentSlug: string; agentName: string }) {
+export function CheckoutButton({
+  agentSlug,
+  agentName,
+  stripePriceId,
+  label,
+}: {
+  agentSlug: string;
+  agentName: string;
+  stripePriceId?: string;
+  label?: string;
+}) {
   const [loading, setLoading] = useState(false);
 
   async function handleCheckout() {
     setLoading(true);
     try {
+      const body: Record<string, string> = { agentSlug };
+      if (stripePriceId) body.priceId = stripePriceId;
+
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agentSlug }),
+        body: JSON.stringify(body),
       });
       const data = await res.json();
       if (data.url) {
@@ -35,7 +48,7 @@ export function CheckoutButton({ agentSlug, agentName }: { agentSlug: string; ag
       onClick={handleCheckout}
       disabled={loading}
     >
-      {loading ? 'Redirecting...' : `Get ${agentName} →`}
+      {loading ? 'Redirecting...' : (label || `Get ${agentName} →`)}
     </Button>
   );
 }

@@ -9,7 +9,7 @@ export function Navbar() {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-blue-500 to-violet-500">
             <span className="text-sm font-bold text-white">🐾</span>
           </div>
-          <span className="text-lg font-bold text-white">OpenClaw</span>
+          <span className="text-lg font-bold text-white">OpenClaw Agents</span>
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

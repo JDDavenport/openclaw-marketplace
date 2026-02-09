@@ -3,6 +3,13 @@ export type Category = 'All' | 'Monitors' | 'Workers' | 'Premium';
 
 export type AgentStatus = 'active' | 'coming_soon';
 
+export interface AgentTier {
+  name: string;
+  price: number;
+  stripePriceId: string;
+  features: string[];
+}
+
 export interface Agent {
   name: string;
   slug: string;
@@ -19,6 +26,7 @@ export interface Agent {
   dailyDeliverable: string;
   faq: { question: string; answer: string }[];
   status: AgentStatus;
+  tiers?: AgentTier[];
 }
 
 export const agents: Agent[] = [
@@ -47,6 +55,41 @@ export const agents: Agent[] = [
     ],
     botUsername: 'openclaw_canvas_bot',
     status: 'active',
+    tiers: [
+      {
+        name: 'Basic',
+        price: 9,
+        stripePriceId: 'price_1SyjJKEyHRuiEtXMQz2cHork',
+        features: [
+          'Daily morning brief with clickable Canvas links',
+          'Deadline alerts every 2 hours',
+          'Chat commands — due dates, grades, course summaries',
+          'Auto-detects semester courses on setup',
+        ],
+      },
+      {
+        name: 'Pro',
+        price: 15,
+        stripePriceId: 'price_1SylMsEyHRuiEtXMPOhecOoE',
+        features: [
+          'Everything in Basic',
+          'Subject Expert — ask questions from course content',
+          'Upload notes (photos, PDFs, text) — bot remembers all',
+          'Quiz mode — test yourself on any topic',
+        ],
+      },
+      {
+        name: 'Premium',
+        price: 25,
+        stripePriceId: 'price_1SylMsEyHRuiEtXMyWSACrqb',
+        features: [
+          'Everything in Pro',
+          'AI-generated study plans',
+          'Exam prep mode with practice questions',
+          'Grade predictions and priority support',
+        ],
+      },
+    ],
     faq: [
       { question: 'What schools does this work with?', answer: 'Any school that uses Canvas LMS (Instructure). This includes most US universities and many international ones. If your school\'s LMS URL contains "instructure.com" or "canvas", it will work.' },
       { question: 'Is my Canvas token safe?', answer: 'Your token is encrypted and stored securely. We never share it or use it for anything other than fetching your course data. You can revoke it anytime from Canvas settings.' },
