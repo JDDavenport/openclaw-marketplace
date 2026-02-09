@@ -5,32 +5,32 @@ import { cn } from '@/lib/utils';
 
 const faqs = [
   {
-    question: 'What exactly do I get when I subscribe?',
-    answer: 'You get a personal AI agent on Telegram that\'s exclusively yours. It has its own isolated workspace, remembers your conversations, and is specialized for its specific purpose. Think of it as hiring a personal assistant that lives in your Telegram.',
+    question: 'What do these agents actually DO?',
+    answer: 'They do real work, autonomously. A Morning Briefing Agent delivers a personalized news digest at 7:30 AM. A Job Hunter searches job boards and writes cover letters. A Content Engine writes and schedules social media posts. They\'re not chatbots — they\'re workers that deliver tangible output every day.',
   },
   {
-    question: 'How quickly can I start using my agent?',
-    answer: 'Instantly. After payment, you\'ll receive a link to your personal Telegram bot. Click it, hit "Start," and you\'re chatting with your agent. The whole process takes under 2 minutes.',
+    question: 'Do I need to prompt them every day?',
+    answer: 'No. That\'s the whole point. Your agents work on autopilot — scheduled tasks run automatically, and deliverables arrive in your Telegram without any input. You can ask follow-up questions anytime, but the core work happens whether you interact or not.',
+  },
+  {
+    question: 'How much time will I actually save?',
+    answer: 'It depends on the agent. Monitors ($9/mo) save 2-4 hours per week on information gathering. Workers ($15/mo) save 5-10 hours per week on active tasks. Premium agents ($25/mo) save 10-20 hours per week on complex workflows. Most users report the time savings justify the cost within the first week.',
   },
   {
     question: 'Is my data private?',
-    answer: 'Absolutely. Each agent runs in a completely isolated workspace. Your conversations, data, and preferences are never shared with other users or used to train models. Your privacy is non-negotiable.',
+    answer: 'Absolutely. Each agent runs in a completely isolated workspace. Your data, preferences, and deliverables are never shared with other users or used to train models. Your privacy is non-negotiable.',
   },
   {
     question: 'Can I cancel anytime?',
     answer: 'Yes, no questions asked. Cancel your subscription anytime and you won\'t be charged again. Your data will be retained for 30 days in case you change your mind.',
   },
   {
-    question: 'Do I need to install anything?',
-    answer: 'Just Telegram — which you probably already have. No apps to download, no accounts to create, no software to configure. Everything happens through Telegram chat.',
+    question: 'What makes this different from ChatGPT or Claude?',
+    answer: 'General AI tools require you to prompt them every time. Our agents work autonomously on a schedule — they monitor, research, write, and deliver without being asked. Plus, each agent is specialized with the right tools, data sources, and workflows for its specific job.',
   },
   {
-    question: 'What makes this different from ChatGPT?',
-    answer: 'Our agents are specialized, not general-purpose. A Fitness Coach knows exercise science. A Budget Buddy understands personal finance. Plus, each agent has persistent memory, so it remembers your goals, preferences, and progress across sessions.',
-  },
-  {
-    question: 'Can I switch agents or subscribe to multiple?',
-    answer: 'Yes to both! Subscribe to as many agents as you want. Each one operates independently with its own Telegram bot and workspace.',
+    question: 'Can I subscribe to multiple agents?',
+    answer: 'Yes! Subscribe to as many agents as you want. Each one operates independently with its own Telegram bot and workspace. Many users start with one and add more as they see the value.',
   },
 ];
 
@@ -45,7 +45,7 @@ export function FAQ() {
             Frequently Asked <span className="gradient-text">Questions</span>
           </h2>
           <p className="mt-4 text-lg text-gray-400">
-            Everything you need to know about OpenClaw agents.
+            Everything you need to know about OpenClaw worker agents.
           </p>
         </div>
 

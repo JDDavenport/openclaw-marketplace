@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { agents, categories, type Category } from '@/lib/agents-data';
+import { agents, categories, type Category, getAgentsByTier, tierInfo } from '@/lib/agents-data';
 import { AgentGrid } from '@/components/agents/agent-grid';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
@@ -23,16 +23,18 @@ export default function AgentsPage() {
     return result;
   }, [selectedCategory, search]);
 
+  const showGrouped = selectedCategory === 'All' && !search.trim();
+
   return (
     <div className="pt-28 pb-20">
       <div className="mx-auto max-w-7xl px-6">
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold md:text-5xl">
-            Agent <span className="gradient-text">Catalog</span>
+            Worker Agent <span className="gradient-text">Catalog</span>
           </h1>
           <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-            Find the perfect AI agent for your needs. Each one is specialized, private, and available 24/7 on Telegram.
+            Autonomous AI agents that deliver real work every day. Pick the ones you need — they start working immediately.
           </p>
         </div>
 
@@ -50,7 +52,9 @@ export default function AgentsPage() {
                     : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white',
                 )}
               >
-                {cat}
+                {cat === 'Monitors' ? '👁️ Monitors — $9/mo' : 
+                 cat === 'Workers' ? '⚒️ Workers — $15/mo' : 
+                 cat === 'Premium' ? '⚡ Premium — $25/mo' : cat}
               </button>
             ))}
           </div>
@@ -63,8 +67,29 @@ export default function AgentsPage() {
           </div>
         </div>
 
-        {/* Results */}
-        <AgentGrid agents={filtered} />
+        {/* Results - grouped by tier or flat */}
+        {showGrouped ? (
+          <div className="space-y-16">
+            {(['monitors', 'workers', 'premium'] as const).map((tier) => {
+              const info = tierInfo[tier];
+              const tierAgents = getAgentsByTier(tier);
+              return (
+                <div key={tier}>
+                  <div className="mb-6">
+                    <div className="flex items-baseline gap-3 mb-2">
+                      <h2 className="text-2xl font-bold text-white">{info.label}</h2>
+                      <span className="text-lg font-semibold text-blue-400">${info.price}/mo</span>
+                    </div>
+                    <p className="text-gray-500">{info.description}</p>
+                  </div>
+                  <AgentGrid agents={tierAgents} />
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <AgentGrid agents={filtered} />
+        )}
       </div>
     </div>
   );

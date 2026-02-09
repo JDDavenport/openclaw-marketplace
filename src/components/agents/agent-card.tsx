@@ -17,9 +17,15 @@ export function AgentCard({ agent }: { agent: Agent }) {
           {agent.name}
         </h3>
 
-        <p className="text-sm text-gray-400 leading-relaxed mb-6 flex-1">
+        <p className="text-sm text-gray-400 leading-relaxed mb-4 flex-1">
           {agent.description}
         </p>
+
+        <div className="flex items-center gap-3 mb-4 text-xs">
+          <span className="flex items-center gap-1 text-green-400">
+            ⏱️ Saves {agent.timeSaved}
+          </span>
+        </div>
 
         <div className="flex items-center justify-between mt-auto">
           <div>

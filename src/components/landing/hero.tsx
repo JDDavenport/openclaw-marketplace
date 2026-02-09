@@ -15,25 +15,25 @@ export function Hero() {
         {/* Badge */}
         <div className="animate-fade-in mb-8 inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-900/50 px-4 py-1.5 text-sm text-gray-400 backdrop-blur-sm">
           <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-          10 AI agents available now
+          9 worker agents — doing real work, every day
         </div>
 
         {/* Headline */}
         <h1 className="animate-fade-in-up mx-auto max-w-4xl text-5xl font-bold tracking-tight md:text-7xl">
-          Your AI Agent,{' '}
-          <span className="gradient-text">One Click Away</span>
+          AI Agents That{' '}
+          <span className="gradient-text">Do the Work</span>
         </h1>
 
         {/* Subheadline */}
         <p className="animate-fade-in-up mx-auto mt-6 max-w-2xl text-lg text-gray-400 leading-relaxed md:text-xl" style={{ animationDelay: '0.1s' }}>
-          Browse specialized AI agents, pay once, and start chatting on Telegram instantly. No setup, no configuration — just results.
+          Autonomous agents that deliver real output every day — briefings, research, job applications, content, and more. Not chatbots. Workers.
         </p>
 
         {/* CTAs */}
         <div className="animate-fade-in-up mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" style={{ animationDelay: '0.2s' }}>
           <Link href="/agents">
             <Button variant="gradient" size="lg">
-              Browse Agents
+              Browse Worker Agents
             </Button>
           </Link>
           <Link href="#how-it-works">
@@ -43,16 +43,16 @@ export function Hero() {
           </Link>
         </div>
 
-        {/* Social proof */}
+        {/* Value props */}
         <div className="animate-fade-in mt-16 flex flex-col sm:flex-row items-center justify-center gap-8 text-sm text-gray-500" style={{ animationDelay: '0.3s' }}>
           <div className="flex items-center gap-2">
-            <span className="text-yellow-400">★★★★★</span>
-            <span>Loved by early users</span>
+            <span>🤖</span>
+            <span>Fully autonomous — no prompting needed</span>
           </div>
           <div className="hidden sm:block h-4 w-px bg-gray-700" />
-          <div>🔒 Your data stays private</div>
+          <div>📬 Daily deliverables to your Telegram</div>
           <div className="hidden sm:block h-4 w-px bg-gray-700" />
-          <div>⚡ Setup in under 2 minutes</div>
+          <div>⏱️ Save 5-20 hours per week</div>
         </div>
       </div>
     </section>

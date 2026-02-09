@@ -3,20 +3,20 @@ export function HowItWorks() {
     {
       number: '01',
       icon: '🔍',
-      title: 'Browse',
-      description: 'Explore our collection of specialized AI agents. Each one is designed for a specific purpose — from fitness coaching to language learning.',
+      title: 'Pick Your Agent',
+      description: 'Browse 9 worker agents across 3 tiers. Monitors ($9), Workers ($15), and Premium ($25). Each agent is built for a specific job.',
     },
     {
       number: '02',
       icon: '💳',
       title: 'Subscribe',
-      description: 'Choose your agent and subscribe with a simple monthly payment. No long-term contracts, cancel anytime. Prices start at just $7/month.',
+      description: 'Subscribe with a simple monthly payment. Your agent starts working immediately — first deliverable arrives within 24 hours. Cancel anytime.',
     },
     {
       number: '03',
-      icon: '💬',
-      title: 'Chat on Telegram',
-      description: 'Get instant access to your personal AI agent on Telegram. Start chatting immediately — your agent remembers everything and gets smarter over time.',
+      icon: '📬',
+      title: 'Get Daily Deliverables',
+      description: 'Your agent works autonomously — briefings, reports, alerts, and drafts delivered straight to Telegram. No prompting needed. Just results.',
     },
   ];
 
@@ -28,14 +28,13 @@ export function HowItWorks() {
             How It <span className="gradient-text">Works</span>
           </h2>
           <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-            Getting started takes less than 2 minutes. Seriously.
+            Subscribe today, get your first deliverable tomorrow morning.
           </p>
         </div>
 
         <div className="grid gap-8 md:grid-cols-3">
           {steps.map((step, i) => (
             <div key={step.number} className="relative group">
-              {/* Connector line */}
               {i < steps.length - 1 && (
                 <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-px bg-gradient-to-r from-gray-700 to-transparent" />
               )}

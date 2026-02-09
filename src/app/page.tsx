@@ -4,7 +4,7 @@ import { HowItWorks } from '@/components/landing/how-it-works';
 import { FAQ } from '@/components/landing/faq';
 import { AgentGrid } from '@/components/agents/agent-grid';
 import { Button } from '@/components/ui/button';
-import { getFeaturedAgents, agents } from '@/lib/agents-data';
+import { getFeaturedAgents, agents, getAgentsByTier, tierInfo } from '@/lib/agents-data';
 
 function FeaturedAgents() {
   const featured = getFeaturedAgents();
@@ -13,10 +13,10 @@ function FeaturedAgents() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold md:text-5xl">
-            Meet Your <span className="gradient-text">AI Agents</span>
+            Your <span className="gradient-text">Worker Agents</span>
           </h2>
           <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-            Each agent is a specialist — trained for one job and excellent at it.
+            Each agent runs autonomously — delivering real work to your Telegram every day.
           </p>
         </div>
         <AgentGrid agents={featured} />
@@ -33,6 +33,12 @@ function FeaturedAgents() {
 }
 
 function Pricing() {
+  const tiers = [
+    { key: 'monitors' as const, icon: '👁️', featured: false },
+    { key: 'workers' as const, icon: '⚒️', featured: true },
+    { key: 'premium' as const, icon: '⚡', featured: false },
+  ];
+
   return (
     <section id="pricing" className="py-24 md:py-32">
       <div className="mx-auto max-w-7xl px-6">
@@ -41,43 +47,50 @@ function Pricing() {
             Simple, <span className="gradient-text">Transparent</span> Pricing
           </h2>
           <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-            No hidden fees. No long-term contracts. Cancel anytime.
+            Pay for the work you need. No hidden fees. Cancel anytime.
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3 max-w-4xl mx-auto">
-          {[
-            { price: 7, label: 'Starting at', agents: 'Meal Planner, Accountability Partner, Journal Buddy', desc: 'Perfect for building daily habits' },
-            { price: 9, label: 'Most popular', agents: 'Study Buddy, Fitness Coach, Budget Buddy, Writing Assistant, Language Tutor', desc: 'The sweet spot for most users', featured: true },
-            { price: 12, label: 'Premium', agents: 'Crypto Tracker, Career Coach', desc: 'Advanced AI for complex tasks' },
-          ].map((tier) => (
-            <div
-              key={tier.price}
-              className={`rounded-2xl border p-8 transition-all duration-300 ${
-                tier.featured
-                  ? 'border-blue-500/50 bg-gradient-to-b from-blue-500/10 to-violet-500/10 scale-105 shadow-xl shadow-blue-500/10'
-                  : 'border-gray-800 bg-gray-900/30 hover:border-gray-700'
-              }`}
-            >
-              {tier.featured && (
-                <div className="text-xs font-medium text-blue-400 mb-4 uppercase tracking-wider">Most Popular</div>
-              )}
-              <div className="text-sm text-gray-500 mb-2">{tier.label}</div>
-              <div className="mb-4">
-                <span className="text-5xl font-bold text-white">${tier.price}</span>
-                <span className="text-gray-500">/mo</span>
+        <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+          {tiers.map(({ key, icon, featured }) => {
+            const info = tierInfo[key];
+            const tierAgents = getAgentsByTier(key);
+            return (
+              <div
+                key={key}
+                className={`rounded-2xl border p-8 transition-all duration-300 ${
+                  featured
+                    ? 'border-blue-500/50 bg-gradient-to-b from-blue-500/10 to-violet-500/10 scale-105 shadow-xl shadow-blue-500/10'
+                    : 'border-gray-800 bg-gray-900/30 hover:border-gray-700'
+                }`}
+              >
+                {featured && (
+                  <div className="text-xs font-medium text-blue-400 mb-4 uppercase tracking-wider">Best Value</div>
+                )}
+                <div className="text-2xl mb-2">{icon}</div>
+                <div className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-2">{info.label}</div>
+                <div className="mb-4">
+                  <span className="text-5xl font-bold text-white">${info.price}</span>
+                  <span className="text-gray-500">/mo per agent</span>
+                </div>
+                <p className="text-sm text-gray-400 mb-6">{info.description}</p>
+                <ul className="space-y-2">
+                  {tierAgents.map(a => (
+                    <li key={a.slug} className="text-xs text-gray-500 flex items-center gap-2">
+                      <span>{a.emoji}</span> {a.name}
+                    </li>
+                  ))}
+                </ul>
               </div>
-              <p className="text-sm text-gray-400 mb-6">{tier.desc}</p>
-              <p className="text-xs text-gray-600 leading-relaxed">{tier.agents}</p>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-12 text-center text-sm text-gray-500 flex flex-wrap justify-center gap-6">
           <span>✓ Cancel anytime</span>
           <span>✓ 7-day free trial</span>
           <span>✓ Secure Stripe payments</span>
-          <span>✓ Instant access</span>
+          <span>✓ Daily deliverables from day 1</span>
         </div>
       </div>
     </section>
@@ -86,9 +99,9 @@ function Pricing() {
 
 function Testimonials() {
   const testimonials = [
-    { name: 'Sarah K.', role: 'Marketing Manager', text: 'Study Buddy helped me pass my PMP certification on the first try. Having a tutor available at midnight when I actually study? Game changer.', emoji: '👩‍💼' },
-    { name: 'Mike R.', role: 'Software Engineer', text: 'Budget Buddy finally made me aware of where my money goes. Just texting my expenses made me spend 30% less in the first month.', emoji: '👨‍💻' },
-    { name: 'Lisa T.', role: 'Freelance Designer', text: 'Accountability Partner keeps me on track with my freelance goals. It\'s like having a supportive friend who actually follows up.', emoji: '👩‍🎨' },
+    { name: 'Sarah K.', role: 'Startup Founder', text: 'The Morning Briefing Agent replaced 30 minutes of doom-scrolling. I get exactly what I need at 7:30 AM and start working immediately.', emoji: '👩‍💼' },
+    { name: 'Mike R.', role: 'Product Manager', text: 'Competitor Watch caught a pricing change from our main rival within hours. That intel alone was worth a year of subscription.', emoji: '👨‍💻' },
+    { name: 'Lisa T.', role: 'Content Creator', text: 'The Content Engine writes drafts that actually sound like me. I went from posting twice a month to daily — and grew 4x in 3 months.', emoji: '👩‍🎨' },
   ];
 
   return (
@@ -96,7 +109,7 @@ function Testimonials() {
       <div className="mx-auto max-w-7xl px-6">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold md:text-5xl">
-            Loved by <span className="gradient-text">Early Users</span>
+            Real Work, <span className="gradient-text">Real Results</span>
           </h2>
         </div>
         <div className="grid gap-8 md:grid-cols-3">
@@ -124,14 +137,14 @@ function CTA() {
     <section className="py-24 md:py-32">
       <div className="mx-auto max-w-4xl px-6 text-center">
         <h2 className="text-3xl font-bold md:text-5xl mb-6">
-          Ready to Get Your <span className="gradient-text">AI Agent</span>?
+          Put Your <span className="gradient-text">Agents to Work</span>
         </h2>
         <p className="text-lg text-gray-400 mb-10 max-w-2xl mx-auto">
-          Join hundreds of users who&apos;ve already made their daily routine smarter with personal AI agents on Telegram.
+          Stop doing work that an agent can do better, faster, and cheaper. Subscribe today and get your first deliverable tomorrow morning.
         </p>
         <Link href="/agents">
           <Button variant="gradient" size="lg">
-            Browse All Agents →
+            Browse Worker Agents →
           </Button>
         </Link>
       </div>
