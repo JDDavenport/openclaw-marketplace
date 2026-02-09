@@ -3,6 +3,7 @@ import { constructWebhookEvent } from "@/lib/stripe";
 import { db, subscriptions, userAgents, paymentEvents, users } from "@/lib/db";
 import { eq, and } from "drizzle-orm";
 import { generateId, nowUnix } from "@/lib/utils";
+import { getAgentBySlug } from "@/lib/agents-data";
 
 export async function POST(request: NextRequest) {
   const body = await request.text();
@@ -31,9 +32,17 @@ export async function POST(request: NextRequest) {
           id: string;
           customer: string;
           subscription: string;
-          metadata: { userId: string; agentId: string };
+          metadata: { userId: string; agentId: string; agentSlug?: string };
         };
         const { userId, agentId } = session.metadata;
+        const agentSlug = session.metadata.agentSlug || agentId;
+
+        // Resolve bot invite link from agent data
+        const agentData = getAgentBySlug(agentSlug);
+        const botUsername = agentData?.botUsername;
+        const telegramInviteLink = botUsername ? `https://t.me/${botUsername}` : null;
+
+        console.log(`[webhook] checkout.session.completed: user=${userId} agent=${agentId} bot=${botUsername} invite=${telegramInviteLink}`);
 
         if (!userId || !agentId) break;
 

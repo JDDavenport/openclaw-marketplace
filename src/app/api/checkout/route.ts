@@ -1,16 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Stripe from 'stripe';
+import { getStripe } from '@/lib/stripe';
 import { getAgentBySlug } from '@/lib/agents-data';
-
-function getStripe() {
-  const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) throw new Error('STRIPE_SECRET_KEY is not set');
-  return new Stripe(key);
-}
+import type Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
   try {
-    const { agentSlug, userEmail } = await req.json();
+    const { agentSlug, userId, userEmail } = await req.json();
 
     const agent = getAgentBySlug(agentSlug);
     if (!agent) {
@@ -19,12 +14,18 @@ export async function POST(req: NextRequest) {
 
     const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
+    // Use slug as agentId since we don't have DB agent IDs in the static data yet
+    const agentId = agent.slug;
+
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       line_items: [{ price: agent.stripePriceId, quantity: 1 }],
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&agent=${agentSlug}`,
       cancel_url: `${origin}/agents/${agentSlug}`,
-      metadata: { agentSlug },
+      metadata: { agentSlug, agentId, userId: userId || 'anonymous' },
+      subscription_data: {
+        metadata: { agentSlug, agentId, userId: userId || 'anonymous' },
+      },
     };
 
     if (userEmail) {
