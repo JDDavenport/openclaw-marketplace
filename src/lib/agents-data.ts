@@ -350,7 +350,7 @@ export const agents: Agent[] = [
     category: 'Career',
     tier: 'career',
     priceMonthly: 15,
-    stripePriceId: 'price_placeholder_resume-agent',
+    stripePriceId: 'price_1SzAFjEyHRuiEtXMHAed2A01',
     timeSaved: '2-3 hrs/application',
     dailyDeliverable: 'On-demand tailored resumes',
     features: [
@@ -380,7 +380,7 @@ export const agents: Agent[] = [
     category: 'Career',
     tier: 'career',
     priceMonthly: 15,
-    stripePriceId: 'price_placeholder_job-finder',
+    stripePriceId: 'price_1SzAFkEyHRuiEtXMKAXdAqZt',
     timeSaved: '5-8 hrs/week',
     dailyDeliverable: 'Daily job matches with scores + company research',
     features: [
@@ -410,7 +410,7 @@ export const agents: Agent[] = [
     category: 'Career',
     tier: 'career',
     priceMonthly: 25,
-    stripePriceId: 'price_placeholder_job-combo',
+    stripePriceId: 'price_1SzAFlEyHRuiEtXMTUi8zcCR',
     timeSaved: '10-15 hrs/week',
     dailyDeliverable: 'Daily matches + tailored resumes for top 5',
     features: [
@@ -440,7 +440,7 @@ export const agents: Agent[] = [
     category: 'Career',
     tier: 'career',
     priceMonthly: 49,
-    stripePriceId: 'price_placeholder_auto-applier',
+    stripePriceId: 'price_1SzAFlEyHRuiEtXMGZ5iC4vb',
     timeSaved: '20+ hrs/week',
     dailyDeliverable: 'Ready-to-submit applications queue',
     features: [
@@ -472,7 +472,7 @@ export const agents: Agent[] = [
     category: 'Builders',
     tier: 'builders',
     priceMonthly: 49,
-    stripePriceId: 'price_placeholder_dev-team',
+    stripePriceId: 'price_1SzAFmEyHRuiEtXMjxYovWHV',
     timeSaved: '40+ hrs/project',
     dailyDeliverable: 'Working code + documentation on demand',
     features: [
