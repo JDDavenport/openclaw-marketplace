@@ -1,5 +1,5 @@
-export type Tier = 'monitors' | 'workers' | 'premium';
-export type Category = 'All' | 'Monitors' | 'Workers' | 'Premium';
+export type Tier = 'monitors' | 'workers' | 'premium' | 'career' | 'builders';
+export type Category = 'All' | 'Monitors' | 'Workers' | 'Premium' | 'Career' | 'Builders';
 
 export type AgentStatus = 'active' | 'coming_soon';
 
@@ -340,14 +340,169 @@ export const agents: Agent[] = [
       { question: 'Can it match my writing voice?', answer: 'Yes. During onboarding you share examples of your writing, and the agent learns your tone, vocabulary, and style. Most users say drafts sound like them within the first week.' },
     ],
   },
+  // === CAREER AGENTS ===
+  {
+    name: 'Resume Agent',
+    slug: 'resume-agent',
+    emoji: '📄',
+    description: 'Upload your resume + paste a job description → get an ATS-optimized, tailored resume in 30 seconds.',
+    longDescription: 'Stop sending the same generic resume to every job. Paste a job description and upload your current resume — this agent analyzes the role requirements, identifies keyword gaps, and rewrites your resume to maximize ATS compatibility and recruiter appeal. It highlights your most relevant experience, quantifies achievements, and formats everything cleanly. Each tailored resume takes about 30 seconds. Use it unlimited times per month.',
+    category: 'Career',
+    tier: 'career',
+    priceMonthly: 15,
+    stripePriceId: 'price_placeholder_resume-agent',
+    timeSaved: '2-3 hrs/application',
+    dailyDeliverable: 'On-demand tailored resumes',
+    features: [
+      'Upload your resume in any format (PDF, DOCX, text)',
+      'Paste any job description to tailor against',
+      'ATS keyword optimization and scoring',
+      'Quantified achievement suggestions',
+      'Clean, professional formatting',
+      'Unlimited resumes per month',
+      'Before/after comparison with improvement score',
+      'Download as PDF or DOCX',
+    ],
+    botUsername: 'openclaw_resume_bot',
+    status: 'coming_soon',
+    faq: [
+      { question: 'What resume formats do you accept?', answer: 'PDF, DOCX, or plain text. You can also paste your resume directly into the chat.' },
+      { question: 'How does ATS optimization work?', answer: 'The agent analyzes the job description for keywords, skills, and requirements, then ensures your resume includes matching language while keeping it natural and truthful.' },
+      { question: 'Can I use this for multiple jobs?', answer: 'Unlimited. Tailor a different resume for every single application — that\'s the whole point.' },
+    ],
+  },
+  {
+    name: 'Job Finder',
+    slug: 'job-finder',
+    emoji: '🔍',
+    description: 'Daily curated job matches delivered to Telegram with match scores and company research.',
+    longDescription: 'Tell this agent your ideal role, salary range, location preferences, and skills. Every morning it searches across major job boards and delivers a curated list of matches — each scored 0-100 on fit with explanations. Includes company research snippets (funding, size, Glassdoor rating, recent news) so you can quickly decide which ones are worth pursuing. No more endless scrolling through job boards.',
+    category: 'Career',
+    tier: 'career',
+    priceMonthly: 15,
+    stripePriceId: 'price_placeholder_job-finder',
+    timeSaved: '5-8 hrs/week',
+    dailyDeliverable: 'Daily job matches with scores + company research',
+    features: [
+      'Daily curated job matches from major boards',
+      'Each job scored 0-100 on fit to your profile',
+      'Company research: funding, size, ratings, news',
+      'Salary range estimation and comparison',
+      'Location and remote work filtering',
+      'Customizable search criteria',
+      'Weekly trend report on your job market',
+      'Delivered to Telegram every morning',
+    ],
+    botUsername: 'openclaw_jobfinder_bot',
+    status: 'coming_soon',
+    faq: [
+      { question: 'Which job boards does it search?', answer: 'Indeed, LinkedIn, Glassdoor, AngelList, and company career pages. We\'re constantly adding more sources.' },
+      { question: 'How accurate are the match scores?', answer: 'Very. The agent compares your skills, experience level, salary expectations, and preferences against each posting. Scores above 80 are strong matches.' },
+      { question: 'Can I change my search criteria?', answer: 'Anytime. Just message the bot with your updated preferences and it adjusts immediately.' },
+    ],
+  },
+  {
+    name: 'Job Finder + Resume Builder',
+    slug: 'job-combo',
+    emoji: '🎯',
+    description: 'Find jobs AND get tailored resumes for each match — one-stop job search pipeline.',
+    longDescription: 'The best of both worlds at a discount. This combo agent finds your best job matches daily AND automatically generates a tailored resume for each top match. Every morning you get your job matches with scores, and for your top 5 matches, a ready-to-submit tailored resume is already prepared. Just review, tweak if needed, and apply. Cuts your job search time by 80%.',
+    category: 'Career',
+    tier: 'career',
+    priceMonthly: 25,
+    stripePriceId: 'price_placeholder_job-combo',
+    timeSaved: '10-15 hrs/week',
+    dailyDeliverable: 'Daily matches + tailored resumes for top 5',
+    features: [
+      'Everything in Job Finder',
+      'Everything in Resume Agent',
+      'Auto-tailored resume for top 5 daily matches',
+      'One-click resume download per job',
+      'Cover letter drafts for each match',
+      'Application tracking dashboard',
+      'Weekly pipeline review and strategy',
+      'Save $5/mo vs buying separately',
+    ],
+    botUsername: 'openclaw_jobcombo_bot',
+    status: 'coming_soon',
+    faq: [
+      { question: 'How is this different from buying both separately?', answer: 'You save $5/mo, and the agents work together seamlessly — resumes are auto-generated for your top matches without any extra steps.' },
+      { question: 'Can I still generate resumes for jobs I find myself?', answer: 'Absolutely. The resume builder works on-demand for any job description, plus it auto-generates for your daily matches.' },
+      { question: 'How many tailored resumes do I get per day?', answer: 'Top 5 matches get auto-tailored resumes daily, plus unlimited on-demand resume generation for any job you paste in.' },
+    ],
+  },
+  {
+    name: 'Full Pipeline (Find + Resume + Apply)',
+    slug: 'auto-applier',
+    emoji: '🚀',
+    description: 'Complete automation: find jobs → tailor resume → fill applications → submit. You just approve.',
+    longDescription: 'The ultimate job search automation. This agent finds matching jobs, tailors your resume for each one, fills out application forms, and prepares everything for submission. You get a daily queue of ready-to-submit applications — just review and approve. It handles the tedious form-filling, cover letters, and follow-up scheduling. Users report applying to 5-10x more jobs with less effort than manual applications.',
+    category: 'Career',
+    tier: 'career',
+    priceMonthly: 49,
+    stripePriceId: 'price_placeholder_auto-applier',
+    timeSaved: '20+ hrs/week',
+    dailyDeliverable: 'Ready-to-submit applications queue',
+    features: [
+      'Everything in Job Finder + Resume Builder',
+      'Auto-fills application forms',
+      'Prepares submissions for your approval',
+      'Cover letters tailored per company',
+      'Follow-up email scheduling',
+      'Application status tracking',
+      'Interview prep when you get callbacks',
+      'Salary negotiation talking points',
+    ],
+    botUsername: 'openclaw_autoapply_bot',
+    status: 'coming_soon',
+    faq: [
+      { question: 'Does it actually submit applications without my approval?', answer: 'Never. Every application is queued for your review first. You approve each one before it\'s submitted. You\'re always in control.' },
+      { question: 'What application platforms does it support?', answer: 'Greenhouse, Lever, Workday, Taleo, and direct company career pages. Most major ATS platforms are supported.' },
+      { question: 'Is this worth $49/mo?', answer: 'If you\'re actively job searching, you\'re probably spending 20+ hours/week on applications. This gives you that time back while applying to more positions with better-tailored materials.' },
+    ],
+  },
+
+  // === BUILDERS AGENTS ===
+  {
+    name: 'Dev Team',
+    slug: 'dev-team',
+    emoji: '👨‍💻',
+    description: 'A full software development team: PM → Architect → Frontend + Backend + Data engineers. Describe what you want, get working code.',
+    longDescription: 'Describe what you want to build in plain English and this agent assembles a virtual development team. A PM breaks down requirements, an Architect designs the system, and specialized engineers (Frontend, Backend, Data) write the actual code. You get a working codebase with documentation, tests, and deployment instructions. Perfect for MVPs, prototypes, internal tools, and side projects. It\'s like having a $500K/year engineering team on demand.',
+    category: 'Builders',
+    tier: 'builders',
+    priceMonthly: 49,
+    stripePriceId: 'price_placeholder_dev-team',
+    timeSaved: '40+ hrs/project',
+    dailyDeliverable: 'Working code + documentation on demand',
+    features: [
+      'PM agent breaks down requirements into tasks',
+      'Architect designs system and data models',
+      'Frontend engineer (React, Next.js, Tailwind)',
+      'Backend engineer (Node, Python, APIs)',
+      'Data engineer (databases, pipelines)',
+      'Working code with tests and documentation',
+      'Git-ready codebase with deployment instructions',
+      'Iterative refinement — describe changes, get updates',
+    ],
+    botUsername: 'openclaw_devteam_bot',
+    status: 'coming_soon',
+    faq: [
+      { question: 'What languages and frameworks does it support?', answer: 'TypeScript/JavaScript (React, Next.js, Node), Python (FastAPI, Django), and common databases (PostgreSQL, MongoDB, Redis). More frameworks coming soon.' },
+      { question: 'Can it work on existing codebases?', answer: 'Yes. Share your repo or paste existing code, and the dev team can extend, refactor, or fix it. It understands context from your existing architecture.' },
+      { question: 'How complex of a project can it handle?', answer: 'It\'s best for MVPs, prototypes, internal tools, and medium-complexity applications. For enterprise-scale systems, use it for the initial build and iterate with your own team.' },
+    ],
+  },
 ];
 
-export const categories: Category[] = ['All', 'Monitors', 'Workers', 'Premium'];
+export const categories: Category[] = ['All', 'Monitors', 'Workers', 'Premium', 'Career', 'Builders'];
 
-export const tierInfo: Record<Tier, { label: string; price: number; description: string }> = {
+export const tierInfo: Record<Tier, { label: string; price: number; priceLabel?: string; description: string }> = {
   monitors: { label: 'Monitors', price: 9, description: 'Set it and forget it — agents that watch the world for you' },
   workers: { label: 'Workers', price: 15, description: 'Your personal workforce — agents that do actual work' },
   premium: { label: 'Premium', price: 25, description: 'Full-service automation — your virtual team' },
+  career: { label: 'Career', price: 15, priceLabel: 'From $15', description: 'Land your dream job — from finding matches to auto-applying' },
+  builders: { label: 'Builders', price: 49, description: 'Build anything — your on-demand engineering team' },
 };
 
 export function getAgentBySlug(slug: string): Agent | undefined {
@@ -364,13 +519,12 @@ export function getAgentsByTier(tier: Tier): Agent[] {
 }
 
 export function getFeaturedAgents(): Agent[] {
-  // One from each tier
   return [
     agents.find(a => a.slug === 'canvas-bot')!,
-    agents.find(a => a.slug === 'price-tracker')!,
-    agents.find(a => a.slug === 'job-hunter')!,
-    agents.find(a => a.slug === 'research-agent')!,
+    agents.find(a => a.slug === 'auto-applier')!,
+    agents.find(a => a.slug === 'dev-team')!,
     agents.find(a => a.slug === 'executive-assistant')!,
+    agents.find(a => a.slug === 'job-combo')!,
     agents.find(a => a.slug === 'content-engine')!,
-  ];
+  ].filter(Boolean);
 }

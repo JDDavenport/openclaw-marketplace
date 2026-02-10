@@ -36,8 +36,10 @@ function FeaturedAgents() {
 function Pricing() {
   const tiers = [
     { key: 'monitors' as const, icon: '👁️', featured: false },
-    { key: 'workers' as const, icon: '⚒️', featured: true },
+    { key: 'workers' as const, icon: '⚒️', featured: false },
+    { key: 'career' as const, icon: '💼', featured: true },
     { key: 'premium' as const, icon: '⚡', featured: false },
+    { key: 'builders' as const, icon: '👨‍💻', featured: false },
   ];
 
   return (
@@ -52,7 +54,7 @@ function Pricing() {
           </p>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
+        <div className="grid gap-6 md:grid-cols-3 lg:grid-cols-5 max-w-7xl mx-auto">
           {tiers.map(({ key, icon, featured }) => {
             const info = tierInfo[key];
             const tierAgents = getAgentsByTier(key);
@@ -71,8 +73,17 @@ function Pricing() {
                 <div className="text-2xl mb-2">{icon}</div>
                 <div className="text-sm text-gray-400 font-medium uppercase tracking-wider mb-2">{info.label}</div>
                 <div className="mb-4">
-                  <span className="text-5xl font-bold text-white">${info.price}</span>
-                  <span className="text-gray-500">/mo per agent</span>
+                  {info.priceLabel ? (
+                    <>
+                      <span className="text-4xl font-bold text-white">{info.priceLabel}</span>
+                      <span className="text-gray-500">/mo</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-4xl font-bold text-white">${info.price}</span>
+                      <span className="text-gray-500">/mo per agent</span>
+                    </>
+                  )}
                 </div>
                 <p className="text-sm text-gray-400 mb-6">{info.description}</p>
                 <ul className="space-y-2">

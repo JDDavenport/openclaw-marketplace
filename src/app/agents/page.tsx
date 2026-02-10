@@ -41,22 +41,30 @@ export default function AgentsPage() {
         {/* Filters */}
         <div className="mb-10 flex flex-col sm:flex-row gap-4 items-center justify-between">
           <div className="flex flex-wrap gap-2">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={cn(
-                  'rounded-full px-4 py-2 text-sm font-medium transition-all cursor-pointer',
-                  selectedCategory === cat
-                    ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
-                    : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white',
-                )}
-              >
-                {cat === 'Monitors' ? '👁️ Monitors — $9/mo' : 
-                 cat === 'Workers' ? '⚒️ Workers — $15/mo' : 
-                 cat === 'Premium' ? '⚡ Premium — $25/mo' : cat}
-              </button>
-            ))}
+            {categories.map((cat) => {
+              const labelMap: Record<string, string> = {
+                'All': 'All',
+                'Monitors': '👁️ Monitors — $9/mo',
+                'Workers': '⚒️ Workers — $15/mo',
+                'Premium': '⚡ Premium — $25/mo',
+                'Career': '💼 Career — from $15/mo',
+                'Builders': '👨‍💻 Builders — $49/mo',
+              };
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  className={cn(
+                    'rounded-full px-4 py-2 text-sm font-medium transition-all cursor-pointer',
+                    selectedCategory === cat
+                      ? 'bg-blue-500 text-white shadow-lg shadow-blue-500/25'
+                      : 'bg-gray-800/50 text-gray-400 hover:bg-gray-800 hover:text-white',
+                  )}
+                >
+                  {labelMap[cat] || cat}
+                </button>
+              );
+            })}
           </div>
           <div className="w-full sm:w-72">
             <Input
@@ -70,7 +78,7 @@ export default function AgentsPage() {
         {/* Results - grouped by tier or flat */}
         {showGrouped ? (
           <div className="space-y-16">
-            {(['monitors', 'workers', 'premium'] as const).map((tier) => {
+            {(['monitors', 'workers', 'premium', 'career', 'builders'] as const).map((tier) => {
               const info = tierInfo[tier];
               const tierAgents = getAgentsByTier(tier);
               return (
@@ -78,7 +86,7 @@ export default function AgentsPage() {
                   <div className="mb-6">
                     <div className="flex items-baseline gap-3 mb-2">
                       <h2 className="text-2xl font-bold text-white">{info.label}</h2>
-                      <span className="text-lg font-semibold text-blue-400">${info.price}/mo</span>
+                      <span className="text-lg font-semibold text-blue-400">{info.priceLabel || `$${info.price}/mo`}</span>
                     </div>
                     <p className="text-gray-500">{info.description}</p>
                   </div>

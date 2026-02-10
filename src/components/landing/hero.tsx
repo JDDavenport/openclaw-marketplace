@@ -15,7 +15,7 @@ export function Hero() {
         {/* Badge */}
         <div className="animate-fade-in mb-8 inline-flex items-center gap-2 rounded-full border border-gray-800 bg-gray-900/50 px-4 py-1.5 text-sm text-gray-400 backdrop-blur-sm">
           <span className="h-2 w-2 rounded-full bg-green-400 animate-pulse" />
-          9 worker agents — doing real work, every day
+          14 worker agents — doing real work, every day
         </div>
 
         {/* Headline */}
