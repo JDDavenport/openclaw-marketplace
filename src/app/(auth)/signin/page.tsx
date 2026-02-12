@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import { signIn } from "@/lib/auth-client";
 import Link from "next/link";
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
+  const redirectTo = searchParams.get("redirect") || "/dashboard";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,7 +21,7 @@ export default function SignInPage() {
     try {
       await signIn.email({ email, password }, {
         onSuccess: () => {
-          window.location.href = "/dashboard";
+          window.location.href = redirectTo;
         },
         onError: (ctx) => {
           setError(ctx.error.message || "Sign in failed");
@@ -30,7 +33,7 @@ export default function SignInPage() {
   }
 
   async function handleGoogleSignIn() {
-    await signIn.social({ provider: "google", callbackURL: "/dashboard" });
+    await signIn.social({ provider: "google", callbackURL: redirectTo });
   }
 
   return (
@@ -103,7 +106,7 @@ export default function SignInPage() {
 
         <p className="text-center text-sm text-gray-600">
           Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-blue-600 hover:underline">
+          <Link href={`/signup${redirectTo !== '/dashboard' ? `?redirect=${encodeURIComponent(redirectTo)}` : ''}`} className="text-blue-600 hover:underline">
             Sign up
           </Link>
         </p>

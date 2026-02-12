@@ -1,11 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getStripe } from '@/lib/stripe';
 import { getAgentBySlug } from '@/lib/agents-data';
+import { requireAuth } from '@/lib/require-auth';
+import { db, users } from '@/lib/db';
+import { eq } from 'drizzle-orm';
 import type Stripe from 'stripe';
 
 export async function POST(req: NextRequest) {
   try {
-    const { agentSlug, userId, userEmail, priceId } = await req.json();
+    // Bug fix #1: Require authenticated user — no more anonymous purchases
+    const authResult = await requireAuth();
+    if ('error' in authResult) return authResult.error;
+
+    const userId = authResult.session.user.id;
+    const userEmail = authResult.session.user.email;
+
+    const { agentSlug, priceId } = await req.json();
 
     const agent = getAgentBySlug(agentSlug);
     if (!agent) {
@@ -13,8 +23,6 @@ export async function POST(req: NextRequest) {
     }
 
     const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-
-    // Use slug as agentId since we don't have DB agent IDs in the static data yet
     const agentId = agent.slug;
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
@@ -23,14 +31,18 @@ export async function POST(req: NextRequest) {
       line_items: [{ price: priceId || agent.stripePriceId, quantity: 1 }],
       success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&agent=${agentSlug}`,
       cancel_url: `${origin}/agents/${agentSlug}`,
-      metadata: { agentSlug, agentId, userId: userId || 'anonymous' },
+      customer_email: userEmail,
+      metadata: { agentSlug, agentId, userId },
       subscription_data: {
-        metadata: { agentSlug, agentId, userId: userId || 'anonymous' },
+        metadata: { agentSlug, agentId, userId },
       },
     };
 
-    if (userEmail) {
-      sessionParams.customer_email = userEmail;
+    // Reuse existing Stripe customer if we have one
+    const userRow = await db.select({ stripeCustomerId: users.stripeCustomerId }).from(users).where(eq(users.id, userId)).limit(1);
+    if (userRow.length > 0 && userRow[0].stripeCustomerId) {
+      sessionParams.customer = userRow[0].stripeCustomerId;
+      delete sessionParams.customer_email; // can't use both
     }
 
     const stripe = getStripe();

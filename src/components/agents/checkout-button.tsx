@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSession } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
 
 export function CheckoutButton({
@@ -14,9 +15,16 @@ export function CheckoutButton({
   stripePriceId?: string;
   label?: string;
 }) {
+  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
 
   async function handleCheckout() {
+    // Bug fix #1: Require auth before checkout — prevents anonymous purchases
+    if (!session?.user) {
+      window.location.href = `/signin?redirect=/agents/${agentSlug}`;
+      return;
+    }
+
     setLoading(true);
     try {
       const body: Record<string, string> = { agentSlug };
@@ -30,6 +38,8 @@ export function CheckoutButton({
       const data = await res.json();
       if (data.url) {
         window.location.href = data.url;
+      } else if (data.error === 'Unauthorized') {
+        window.location.href = `/signin?redirect=/agents/${agentSlug}`;
       } else {
         alert('Something went wrong. Please try again.');
         setLoading(false);

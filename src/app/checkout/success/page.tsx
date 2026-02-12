@@ -3,18 +3,24 @@
 import { useSearchParams } from 'next/navigation';
 import { Suspense } from 'react';
 import Link from 'next/link';
+import { useSession } from '@/lib/auth-client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { agents } from '@/lib/agents-data';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
+  const { data: session } = useSession();
   const agentSlug = searchParams.get('agent');
   const agent = agentSlug ? agents.find(a => a.slug === agentSlug) : null;
 
   const botUsername = agent?.botUsername || 'openclaw_bot';
   const agentName = agent?.name || 'Your AI Agent';
   const agentEmoji = agent?.emoji || '🤖';
+
+  // Bug fix #3: Deep link includes userId so the bot can pair Telegram ↔ web account
+  const userId = session?.user?.id || '';
+  const telegramDeepLink = `https://t.me/${botUsername}?start=${userId}`;
 
   return (
     <div className="pt-28 pb-20">
@@ -31,9 +37,9 @@ function SuccessContent() {
           {agentEmoji} <strong>{agentName}</strong> is ready and waiting for you on Telegram. Let&apos;s get you connected.
         </p>
 
-        {/* Telegram CTA */}
+        {/* Telegram CTA — deep link pairs Telegram account to web user */}
         <a
-          href={`https://t.me/${botUsername}`}
+          href={telegramDeepLink}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -59,7 +65,7 @@ function SuccessContent() {
               {
                 step: 2,
                 title: 'Hit "Start"',
-                description: `Press the Start button in Telegram to activate your ${agentName}.`,
+                description: `Press the Start button in Telegram. This links your Telegram account to your subscription automatically.`,
               },
               {
                 step: 3,

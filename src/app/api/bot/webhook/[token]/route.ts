@@ -16,11 +16,18 @@ let tokensCached = false;
 
 async function loadKnownTokens() {
   if (tokensCached) return;
-  const rows = await db.select({ botToken: agents.botToken }).from(agents);
-  for (const row of rows) {
-    if (row.botToken) knownTokens.add(row.botToken);
+
+  // Load from DB
+  try {
+    const rows = await db.select({ botToken: agents.botToken }).from(agents);
+    for (const row of rows) {
+      if (row.botToken) knownTokens.add(row.botToken);
+    }
+  } catch {
+    // DB might not have agents table seeded yet
   }
-  // Also load from env (comma-separated fallback)
+
+  // Bug fix #4: Always load from env — primary fallback when DB agents table is empty
   const envTokens = process.env.TELEGRAM_BOT_TOKENS?.split(",") ?? [];
   for (const t of envTokens) {
     if (t.trim()) knownTokens.add(t.trim());
