@@ -1,56 +1,61 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getStripe } from '@/lib/stripe';
 import { getAgentBySlug } from '@/lib/agents-data';
 import { requireAuth } from '@/lib/require-auth';
-import { db, users } from '@/lib/db';
-import { eq } from 'drizzle-orm';
-import type Stripe from 'stripe';
+import { db, subscriptions, userAgents } from '@/lib/db';
+import { nowUnix } from '@/lib/utils';
 
 export async function POST(req: NextRequest) {
   try {
-    // Bug fix #1: Require authenticated user — no more anonymous purchases
+    // Require authenticated user
     const authResult = await requireAuth();
     if ('error' in authResult) return authResult.error;
 
     const userId = authResult.session.user.id;
-    const userEmail = authResult.session.user.email;
-
-    const { agentSlug, priceId } = await req.json();
+    const { agentSlug, promoCode } = await req.json();
 
     const agent = getAgentBySlug(agentSlug);
     if (!agent) {
       return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
-    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const agentId = agent.slug;
-
-    const sessionParams: Stripe.Checkout.SessionCreateParams = {
-      mode: 'subscription',
-      allow_promotion_codes: true,
-      line_items: [{ price: priceId || agent.stripePriceId, quantity: 1 }],
-      success_url: `${origin}/checkout/success?session_id={CHECKOUT_SESSION_ID}&agent=${agentSlug}`,
-      cancel_url: `${origin}/agents/${agentSlug}`,
-      customer_email: userEmail,
-      metadata: { agentSlug, agentId, userId },
-      subscription_data: {
-        metadata: { agentSlug, agentId, userId },
-      },
-    };
-
-    // Reuse existing Stripe customer if we have one
-    const userRow = await db.select({ stripeCustomerId: users.stripeCustomerId }).from(users).where(eq(users.id, userId)).limit(1);
-    if (userRow.length > 0 && userRow[0].stripeCustomerId) {
-      sessionParams.customer = userRow[0].stripeCustomerId;
-      delete sessionParams.customer_email; // can't use both
+    // Only BYUFREE promo code works — Stripe is offline
+    if (!promoCode || promoCode.toUpperCase() !== 'BYUFREE') {
+      return NextResponse.json({ error: 'Payment system offline. Enter access code to continue.' }, { status: 400 });
     }
 
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create(sessionParams);
+    const agentId = agent.slug;
+    const now = nowUnix();
+    const subId = `free_${userId}_${agentId}_${now}`;
 
-    return NextResponse.json({ url: session.url });
+    // Create subscription record (no Stripe)
+    await db.insert(subscriptions).values({
+      id: subId,
+      userId,
+      agentId,
+      stripeSubscriptionId: `promo_BYUFREE_${now}`,
+      status: 'active',
+      currentPeriodStart: now,
+      currentPeriodEnd: now + (365 * 24 * 60 * 60), // 1 year
+      createdAt: now,
+      updatedAt: now,
+    }).onConflictDoNothing();
+
+    // Create userAgent record
+    await db.insert(userAgents).values({
+      id: `ua_${userId}_${agentId}_${now}`,
+      userId,
+      agentId,
+      workspacePath: `/agents/${agentId}/${userId}`,
+      isPaired: false,
+      onboardingCompleted: false,
+      createdAt: now,
+      updatedAt: now,
+    }).onConflictDoNothing();
+
+    const origin = req.headers.get('origin') || process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    return NextResponse.json({ url: `${origin}/checkout/success?agent=${agentSlug}` });
   } catch (error) {
     console.error('Checkout error:', error);
-    return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
+    return NextResponse.json({ error: 'Failed to process registration' }, { status: 500 });
   }
 }
